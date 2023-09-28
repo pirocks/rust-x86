@@ -13,6 +13,7 @@ bitflags! {
     /// with some additional flags).
     ///
     /// See Intel 3a, Section 3.4.2 "Segment Selectors"
+    #[derive(Copy, Clone, Debug, Eq, PartialEq, PartialOrd, Ord, Hash)]
     pub struct SegmentSelector: u16 {
         /// Requestor Privilege Level
         const RPL_0 = 0b00;
@@ -34,19 +35,17 @@ impl SegmentSelector {
     ///  * `index` - index in GDT or LDT array.
     ///  * `rpl` - Requested privilege level of the selector
     pub const fn new(index: u16, rpl: Ring) -> SegmentSelector {
-        SegmentSelector {
-            bits: index << 3 | (rpl as u16),
-        }
+        SegmentSelector::from_raw(index << 3 | (rpl as u16))
     }
 
     /// Returns segment selector's index in GDT or LDT.
     pub fn index(&self) -> u16 {
-        self.bits >> 3
+        self.bits() >> 3
     }
 
     /// Make a new segment selector from a untyped u16 value.
     pub const fn from_raw(bits: u16) -> SegmentSelector {
-        SegmentSelector { bits }
+        SegmentSelector::from_bits_truncate(bits)
     }
 }
 
@@ -76,7 +75,7 @@ impl fmt::Display for SegmentSelector {
         write!(
             f,
             "Index {} in {}, {}{}{}{}",
-            self.bits >> 3,
+            self.bits() >> 3,
             tbl,
             r0,
             r1,

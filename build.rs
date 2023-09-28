@@ -188,7 +188,7 @@ mod performance_counter {
 
                         match key.as_str() {
                             "EventName" => {
-                                if !all_events.contains_key(value_str.clone()) {
+                                if !all_events.contains_key(value_str) {
                                     all_events.insert(value_str, 0);
                                     assert!(all_events.contains_key(value_str));
                                     do_insert = true;

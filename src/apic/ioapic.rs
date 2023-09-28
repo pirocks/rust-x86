@@ -14,6 +14,7 @@ bitflags! {
     /// The first (low) register in a pair contains configuration bits.
     /// The second (high) register contains a bitmask telling which
     /// CPUs can serve that interrupt.
+    #[derive(Copy, Clone, Debug, Eq, PartialEq, PartialOrd, Ord, Hash)]
     struct RedirectionEntry: u32 {
         /// Interrupt disabled
         const DISABLED  = 0x00010000;

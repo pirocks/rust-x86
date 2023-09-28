@@ -7,6 +7,7 @@ use core::arch::asm;
 
 bitflags! {
     /// The EFLAGS register.
+    #[derive(Copy, Clone, Debug, Eq, PartialEq, PartialOrd, Ord, Hash)]
     pub struct EFlags: u32 {
         /// ID Flag (ID)
         const FLAGS_ID = 1 << 21;
@@ -61,9 +62,7 @@ impl EFlags {
 
     /// Creates a new Flags with the given I/O privilege level.
     pub const fn from_priv(iopl: Ring) -> EFlags {
-        EFlags {
-            bits: (iopl as u32) << 12,
-        }
+        EFlags::from_bits_truncate((iopl as u32) << 12)
     }
 }
 

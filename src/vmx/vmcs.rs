@@ -182,6 +182,7 @@ pub mod control {
         /// A set of bitmask flags useful when setting up [`PINBASED_EXEC_CONTROLS`] VMCS field.
         ///
         /// See Intel SDM, Volume 3C, Section 24.6.1.
+        #[derive(Copy, Clone, Debug, Eq, PartialEq, PartialOrd, Ord, Hash)]
         pub struct PinbasedControls: u32 {
             /// External-interrupt exiting.
             const EXTERNAL_INTERRUPT_EXITING = 1 << 0;
@@ -202,6 +203,7 @@ pub mod control {
         /// A set of bitmask flags useful when setting up [`PRIMARY_PROCBASED_EXEC_CONTROLS`] VMCS field.
         ///
         /// See Intel SDM, Volume 3C, Section 24.6.2, Table 24-6.
+        #[derive(Copy, Clone, Debug, Eq, PartialEq, PartialOrd, Ord, Hash)]
         pub struct PrimaryControls: u32 {
             /// Interrupt-window exiting.
             const INTERRUPT_WINDOW_EXITING = 1 << 2;
@@ -254,6 +256,7 @@ pub mod control {
         /// A set of bitmask flags useful when setting up [`SECONDARY_PROCBASED_EXEC_CONTROLS`] VMCS field.
         ///
         /// See Intel SDM, Volume 3C, Section 24.6.2, Table 24-7.
+        #[derive(Copy, Clone, Debug, Eq, PartialEq, PartialOrd, Ord, Hash)]
         pub struct SecondaryControls: u32 {
             /// Virtualize APIC accesses.
             const VIRTUALIZE_APIC = 1 << 0;
@@ -318,6 +321,7 @@ pub mod control {
         /// A set of bitmask flags useful when setting up [`VMENTRY_CONTROLS`] VMCS field.
         ///
         /// See Intel SDM, Volume 3C, Section 24.8.
+        #[derive(Copy, Clone, Debug, Eq, PartialEq, PartialOrd, Ord, Hash)]
         pub struct EntryControls: u32 {
             /// Load debug controls.
             const LOAD_DEBUG_CONTROLS = 1 << 2;
@@ -348,6 +352,7 @@ pub mod control {
         /// A set of bitmask flags useful when setting up [`VMEXIT_CONTROLS`] VMCS field.
         ///
         /// See Intel SDM, Volume 3C, Section 24.7.
+        #[derive(Copy, Clone, Debug, Eq, PartialEq, PartialOrd, Ord, Hash)]
         pub struct ExitControls: u32 {
             /// Save debug controls.
             const SAVE_DEBUG_CONTROLS = 1 << 2;

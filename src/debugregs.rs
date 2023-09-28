@@ -101,6 +101,7 @@ pub unsafe fn dr3_write(val: usize) {
 
 bitflags! {
     /// Debug register 6 (dr6) flags.
+    #[derive(Copy, Clone, Debug, Eq, PartialEq, PartialOrd, Ord, Hash)]
     pub struct Dr6: usize {
         /// B0 breakpoint condition detected
         ///
@@ -201,7 +202,8 @@ pub unsafe fn dr6() -> Dr6 {
 /// # Safety
 /// Needs CPL 0.
 pub unsafe fn dr6_write(val: Dr6) {
-    asm!("mov {}, %dr6", in(reg) val.bits, options(att_syntax));
+    let bits = val.bits();
+    asm!("mov {}, %dr6", in(reg) bits, options(att_syntax));
 }
 
 /// Specifies available hardware breakpoints.

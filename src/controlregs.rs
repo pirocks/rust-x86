@@ -7,6 +7,7 @@ use crate::arch::{_xgetbv, _xsetbv};
 use core::arch::asm;
 
 bitflags! {
+    #[derive(Copy, Clone, Debug, Eq, PartialEq, PartialOrd, Ord, Hash)]
     pub struct Cr0: usize {
         const CR0_ENABLE_PAGING = 1 << 31;
         const CR0_CACHE_DISABLE = 1 << 30;
@@ -23,6 +24,7 @@ bitflags! {
 }
 
 bitflags! {
+    #[derive(Copy, Clone, Debug, Eq, PartialEq, PartialOrd, Ord, Hash)]
     pub struct Cr4: usize {
         /// Enables use of Protection Keys (MPK).
         const CR4_ENABLE_PROTECTION_KEY = 1 << 22;
@@ -75,6 +77,7 @@ bitflags! {
 }
 
 bitflags! {
+    #[derive(Copy, Clone, Debug, Eq, PartialEq, PartialOrd, Ord, Hash)]
     pub struct Xcr0: u64 {
         const XCR0_PKRU_STATE = 1 << 9;
         const XCR0_HI16_ZMM_STATE = 1 << 7;
@@ -103,7 +106,7 @@ pub unsafe fn cr0() -> Cr0 {
 /// # Safety
 /// Needs CPL 0.
 pub unsafe fn cr0_write(val: Cr0) {
-    asm!("mov {0}, %cr0", in(reg) val.bits, options(att_syntax));
+    asm!("mov {0}, %cr0", in(reg) val.bits(), options(att_syntax));
 }
 
 /// Contains page-fault linear address.
@@ -168,7 +171,8 @@ pub unsafe fn cr4() -> Cr4 {
 /// # Safety
 /// Needs CPL 0.
 pub unsafe fn cr4_write(val: Cr4) {
-    asm!("mov {0}, %cr4", in(reg) val.bits, options(att_syntax));
+    let bits = val.bits();
+    asm!("mov {0}, %cr4", in(reg) bits, options(att_syntax));
 }
 
 /// Read Extended Control Register XCR0.
@@ -186,5 +190,5 @@ pub unsafe fn xcr0() -> Xcr0 {
 /// # Safety
 /// Needs CPL 0.
 pub unsafe fn xcr0_write(val: Xcr0) {
-    _xsetbv(0, val.bits);
+    _xsetbv(0, val.bits());
 }

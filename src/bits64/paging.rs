@@ -1216,6 +1216,7 @@ pub fn pt_index(addr: VAddr) -> usize {
 bitflags! {
     /// PML4 configuration bit description.
     #[repr(transparent)]
+    #[derive(Copy, Clone, Debug, Eq, PartialEq, PartialOrd, Ord, Hash)]
     pub struct PML4Flags: u64 {
         /// Present; must be 1 to reference a page-directory-pointer table
         const P       = bit!(0);
@@ -1248,6 +1249,7 @@ bitflags! {
 bitflags! {
     /// PML5 configuration bit description.
     #[repr(transparent)]
+    #[derive(Copy, Clone, Debug, Eq, PartialEq, PartialOrd, Ord, Hash)]
     pub struct PML5Flags: u64 {
         /// Present; must be 1 to reference a PML5 entry
         const P       = bit!(0);
@@ -1304,7 +1306,7 @@ impl PML4Entry {
         let pml4_val = pml4 & ADDRESS_MASK;
         assert!(pml4_val == pml4.into());
         assert!(pml4 % BASE_PAGE_SIZE == 0);
-        PML4Entry(pml4_val | flags.bits)
+        PML4Entry(pml4_val | flags.bits())
     }
 
     /// Retrieves the physical address in this entry.
@@ -1362,7 +1364,7 @@ impl PML5Entry {
         let pml5_val = pml4 & ADDRESS_MASK;
         assert!(pml5_val == pml4.into());
         assert!(pml4 % BASE_PAGE_SIZE == 0);
-        PML5Entry(pml5_val | flags.bits)
+        PML5Entry(pml5_val | flags.bits())
     }
 
     /// Retrieves the physical address in this entry.
@@ -1396,6 +1398,7 @@ impl PML5Entry {
 bitflags! {
     /// PDPT configuration bit description.
     #[repr(transparent)]
+    #[derive(Copy, Clone, Debug, Eq, PartialEq, PartialOrd, Ord, Hash)]
     pub struct PDPTFlags: u64 {
         /// Present; must be 1 to map a 1-GByte page or reference a page directory.
         const P       = bit!(0);
@@ -1458,9 +1461,9 @@ impl PDPTEntry {
     ///  * `flags`- Additional flags for the entry.
     pub fn new(pd: PAddr, flags: PDPTFlags) -> PDPTEntry {
         let pd_val = pd & ADDRESS_MASK;
-        assert!(pd_val == pd.into());
-        assert!(pd % BASE_PAGE_SIZE == 0);
-        PDPTEntry(pd_val | flags.bits)
+        assert_eq!(pd_val, pd.into());
+        assert_eq!(pd % BASE_PAGE_SIZE, 0);
+        PDPTEntry(pd_val | flags.bits())
     }
 
     /// Retrieves the physical address in this entry.
@@ -1505,6 +1508,7 @@ impl PDPTEntry {
 bitflags! {
     /// PD configuration bits description.
     #[repr(transparent)]
+    #[derive(Copy, Clone, Debug, Eq, PartialEq, PartialOrd, Ord, Hash)]
     pub struct PDFlags: u64 {
         /// Present; must be 1 to map a 2-MByte page or reference a page table.
         const P       = bit!(0);
@@ -1562,9 +1566,9 @@ impl PDEntry {
     ///  * `flags`- Additional flags for the entry.
     pub fn new(pt: PAddr, flags: PDFlags) -> PDEntry {
         let pt_val = pt & ADDRESS_MASK;
-        assert!(pt_val == pt.into());
-        assert!(pt % BASE_PAGE_SIZE == 0);
-        PDEntry(pt_val | flags.bits)
+        assert_eq!(pt_val, pt.into());
+        assert_eq!(pt % BASE_PAGE_SIZE, 0);
+        PDEntry(pt_val | flags.bits())
     }
 
     /// Retrieves the physical address in this entry.
@@ -1613,6 +1617,7 @@ impl PDEntry {
 bitflags! {
     /// PT Entry bits description.
     #[repr(transparent)]
+    #[derive(Copy, Clone, Debug, Eq, PartialEq, PartialOrd, Ord, Hash)]
     pub struct PTFlags: u64 {
         /// Present; must be 1 to map a 4-KByte page.
         const P       = bit!(0);
@@ -1662,9 +1667,9 @@ impl PTEntry {
     ///  * `flags`- Additional flags for the entry.
     pub fn new(page: PAddr, flags: PTFlags) -> PTEntry {
         let page_val = page & ADDRESS_MASK;
-        assert!(page_val == page.into());
-        assert!(page % BASE_PAGE_SIZE == 0);
-        PTEntry(page_val | flags.bits)
+        assert_eq!(page_val, page.into());
+        assert_eq!(page % BASE_PAGE_SIZE, 0);
+        PTEntry(page_val | flags.bits())
     }
 
     /// Retrieves the physical address in this entry.

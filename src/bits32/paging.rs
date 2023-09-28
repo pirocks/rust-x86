@@ -1067,6 +1067,7 @@ pub fn pt_index(addr: VAddr) -> usize {
 bitflags! {
     /// PD configuration bits description.
     #[repr(transparent)]
+    #[derive(Copy, Clone, Debug, Eq, PartialEq, PartialOrd, Ord, Hash)]
     pub struct PDFlags: u32 {
         /// Present; must be 1 to map a 4-MByte page.
         const P       = bit!(0);
@@ -1121,9 +1122,9 @@ impl PDEntry {
             ADDRESS_MASK
         };
         let pt_val = pt & mask;
-        assert!(pt_val == pt.into());
-        assert!(pt % BASE_PAGE_SIZE == 0);
-        PDEntry(pt_val | flags.bits)
+        assert_eq!(pt_val, pt.into());
+        assert_eq!(pt % BASE_PAGE_SIZE, 0);
+        PDEntry(pt_val | flags.bits())
     }
 
     /// Retrieves the physical address in this entry.
@@ -1174,6 +1175,7 @@ impl PDEntry {
 bitflags! {
     /// PT Entry bits description.
     #[repr(transparent)]
+    #[derive(Copy, Clone, Debug, Eq, PartialEq, PartialOrd, Ord, Hash)]
     pub struct PTFlags: u32 {
         /// Present; must be 1 to map a 4-KByte page.
         const P       = bit!(0);
@@ -1219,7 +1221,7 @@ impl PTEntry {
         let page_val = page & ADDRESS_MASK;
         assert!(page_val == page.into());
         assert!(page % BASE_PAGE_SIZE == 0);
-        PTEntry(page_val | flags.bits)
+        PTEntry(page_val | flags.bits())
     }
 
     /// Retrieves the physical address in this entry.

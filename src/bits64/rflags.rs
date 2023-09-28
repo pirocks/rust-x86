@@ -14,6 +14,7 @@ use core::arch::asm;
 bitflags! {
     /// The RFLAGS register.
     /// This is duplicated code from bits32 eflags.rs.
+    #[derive(Copy, Clone, Debug, Eq, PartialEq, PartialOrd, Ord, Hash)]
     pub struct RFlags: u64 {
         /// ID Flag (ID)
         const FLAGS_ID = 1 << 21;
@@ -68,13 +69,11 @@ impl RFlags {
 
     /// Creates a new Flags with the given I/O privilege level.
     pub const fn from_priv(iopl: Ring) -> RFlags {
-        RFlags {
-            bits: (iopl as u64) << 12,
-        }
+        RFlags::from_raw((iopl as u64) << 12)
     }
 
     pub const fn from_raw(bits: u64) -> RFlags {
-        RFlags { bits }
+        RFlags::from_bits_truncate(bits)
     }
 }
 

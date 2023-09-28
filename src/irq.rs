@@ -286,6 +286,7 @@ pub static EXCEPTIONS: [InterruptDescription; 32] = [
 
 bitflags! {
     // Taken from Intel Manual Section 4.7 Page-Fault Exceptions.
+    #[derive(Copy, Clone, Debug, Eq, PartialEq, PartialOrd, Ord, Hash)]
     pub struct PageFaultError: u32 {
         /// 0: The fault was caused by a non-present page.
         /// 1: The fault was caused by a page-level protection violation
